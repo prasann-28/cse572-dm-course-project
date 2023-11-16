@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Recommendation System</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/landing.css') }}" />
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<section class="showcase">
+			<div class="video-container">
+				<video src="{{ url_for('static', filename='video.mov') }}" autoplay muted loop></video>
+			</div>
+            
+			<div class="content">
+                <h1>Multi-Media Personalized Recommendation System: Leveraging User Preferences and History</h1>
+                <h2 style="font-weight: lighter;">Description</h3>
+				<h3 style="font-weight: lighter;">Enter User ID to continue</h3>
+                <form action="/" method = "POST">
+                    <input class="input" style="padding: 0.8em; margin-right: 5em; border-radius: 5px; " type="text" name="user_id"/>
+                    <button  class="btn" style="margin-right: 40px; font-size:medium;">Continue</button>
+                </form>
+                
+                
+            </div>
+		</section>
+<!-- partial -->
+  
+</body>
+</html>

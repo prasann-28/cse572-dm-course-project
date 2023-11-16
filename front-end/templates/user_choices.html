@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Recommendations System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:500.700'>
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/user_choices.css') }}">
+
+</head>
+<body>
+  <script>
+    userChoices =  []
+    async function submitForm(category) {
+      if (!userChoices.includes(category)) {
+     userChoices.push(category);
+     const outputContainer = document.getElementById('output-container');
+     outputContainer.innerHTML = ''
+    userChoices.forEach((element) => {    
+    const htmlContent = `<div><span class='selected_elements'>${element}</span></div>`;
+    outputContainer.innerHTML += htmlContent;
+});
+    }
+   else{ if (userChoices.includes(category)) {
+      const indexToRemove = userChoices.indexOf(category);
+
+  if (indexToRemove !== -1) {
+      userChoices.splice(indexToRemove, 1);
+  }
+
+     const outputContainer = document.getElementById('output-container');
+     outputContainer.innerHTML = ''
+     console.log(userChoices)
+    userChoices.forEach((element) => {
+    // Using a template literal to create HTML content
+    const htmlContent = `<h1 slot='header'>${element}</h1>`;
+
+    // Append the HTML content to the output container
+    outputContainer.innerHTML += htmlContent;})
+    }
+}
+    
+    
+   
+    }
+   
+    function submitSelections(){
+      
+      const serializedUserChoices = userChoices.join(',');
+      const selectElement = document.getElementById('genreSelect');
+      const selectedValue = selectElement.value;
+      console.log(serializedUserChoices );
+      document.getElementById('selections').value = serializedUserChoices + ',' + selectedValue ;
+      document.getElementById('selections').submit();
+    }
+
+  </script>
+<!-- partial:index.partial.html -->
+<h1 class="title">Hello User id: {{user_id}}</h1>
+
+<div id="app" class="container">
+	
+    <input type="hidden" name="selected_category" id="selected_category_input_books">
+  <card data-image="https://images.unsplash.com/photo-1479660656269-197ebb83b540?dpr=2&auto=compress,format&fit=crop&w=1199&h=798&q=80&cs=tinysrgb&crop=" onclick="submitForm('books')" >
+    <h1 slot="header">Books</h1>
+    <p slot="content">Click to get book recommendations</p>
+  </card>
+
+
+  <input type="hidden" name="selected_category" id="selected_category_input_movies">
+  <card data-image="https://images.unsplash.com/photo-1479659929431-4342107adfc1?dpr=2&auto=compress,format&fit=crop&w=1199&h=799&q=80&cs=tinysrgb&crop=" onclick="submitForm('movies')">
+    <h1 slot="header">Movies</h1>
+    <p slot="content">Click to get movies recommendations</p>
+  </card>
+
+  <input type="hidden" name="selected_category" id="selected_category_input_tvshows">
+  <card data-image="https://images.unsplash.com/photo-1479644025832-60dabb8be2a1?dpr=2&auto=compress,format&fit=crop&w=1199&h=799&q=80&cs=tinysrgb&crop=" onclick="submitForm('tvshows')">
+    <h1 slot="header">TV Shows</h1>
+    <p slot="content">Click to get TV shows recommendations</p>
+  </card>
+
+</div>
+
+<div  style="width: 80%; height: 150px; text-align: center; line-height: 200px;  align-items: center; margin: auto;">
+  <div id="output-container" style="width: 80%; align-items: center; display: flex; flex-direction: row; margin: auto;  align-items: center; justify-content: space-evenly;">
+    <h1 slot="header">Selections Appear Here</h1>
+</div>
+</div>
+<!-- <div style="background-color: blue;  align-items: center;">
+  <ul class="nav" style="margin: auto; align-items: center;">
+    <li class="button-dropdown" style="margin: auto; align-items: center;">
+      <a href="javascript:void(0)" class="dropdown-toggle">
+        Dropdown 1 <span>▼</span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="#">
+            Drop Item 1
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            Drop Item 2
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            Drop Item 3
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+  </ul>
+</div> -->
+
+<div style="align-items: center; display: flex; flex-direction: row; padding-top: 10px; padding-bottom: 10px;">
+   <div class="select" style="display: flex; flex-direction: row; margin: auto; padding-bottom: 20px; border-color: black;">
+    <select id="genreSelect">
+     <option value="Select a genre">Select a genre</option>
+    </select>
+  </div>
+</div>
+
+<script>
+const movieGenres = [
+    "Action",
+    "Adventure",
+    "Comedy",
+    "Drama",
+    "Fantasy",
+    "Horror",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Thriller",
+    "Animation",
+    "Documentary",
+];
+
+function addOptionsForGenres() {
+            const selectElement = document.getElementById('genreSelect');
+
+            movieGenres.forEach((genre) => {
+                const option = document.createElement('option');
+                option.value = genre;
+                option.textContent = genre;
+                selectElement.appendChild(option);
+            });
+        }
+addOptionsForGenres();
+</script>
+
+<div style="display: flex; align-items: center;">
+<form style="margin: auto;" name="selections" action="/user-choices" method="post">
+  <input style="display: flex; align-items: center;" type="hidden" name="selections_array" id="selections">
+  <button class="custom-btn btn-3" style="margin: auto;" onclick="submitSelections()"><span style="margin: auto; font-family: Raleway; font-weight: 500; font-size: medium;">Submit</span></button>
+</form>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.1/vue.min.js'></script>
+  <script  src="{{ url_for('static', filename='scripts/user_choices_script.js') }}"></script>
+
+
+  <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+</body>
+</html>
